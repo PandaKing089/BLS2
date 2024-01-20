@@ -1,4 +1,4 @@
-# NOTE: WorkingTurboGPT is now dpercated because of the built-in reverse proxy. Please use it's successor [PenguinGPT](https://github.com/cicerorph/WorkingPenguinGPT/blob/main/extension.js). trying to use the import link provided will automatically download PenguinGPT. This is to 'fix' existing projects with WorkingTurboGPT that's imported by URL.
+# NOTE: WorkingTurboGPT is now dpercated because of the built-in reverse proxy. Please use it's successor [PenguinGPT](https://rubyteam.tech/cdn/extensions/penguingpt.js) by [RubyTeam](https://rubyteam.tech/gallery). trying to use the import link provided will automatically download PenguinGPT. This is to 'fix' existing projects with WorkingTurboGPT that's imported by URL.
 
 # WorkingTurboGPT
 
