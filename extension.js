@@ -18,7 +18,7 @@
 
     getInfo() {
       return {
-        id: "workingturbogpt",
+        id: "workingturboGPT",
         name: "PenguinGPT (loaded from Anonymous_cat's repo, may not be updated)",
         menuIconURI: extIcon,
         blockIconURI: gptIcon,
@@ -481,5 +481,5 @@
     }
 
   }
-  Scratch.extensions.register(new WorkingPenguinGPT());
+  Scratch.extensions.register(new WorkingTurboGPT());
 })(Scratch);
