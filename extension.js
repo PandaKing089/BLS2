@@ -11,15 +11,15 @@
    // Initialize the api_url variable with a default value
 	let api_url = 'https://reverse.mubi.tech/v1/chat/completions';
 
-  class WorkingPenguinGPT {
+  class WorkingTurboGPT {
     constructor() {
       this.chatHistories = {};
     }
 
     getInfo() {
       return {
-        id: "penguinGPT",
-        name: "PenguinGPT",
+        id: "workingturbogpt",
+        name: "PenguinGPT (loaded from Anonymous_cat's repo, may not be updated)",
         menuIconURI: extIcon,
         blockIconURI: gptIcon,
         blocks: [
