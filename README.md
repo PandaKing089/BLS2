@@ -1,8 +1,8 @@
 # NOTE: WorkingTurboGPT is now deprecated because of the built-in reverse proxy. (It's blocked on PenguinMod, the main userbase for this extension)
 
 ## Even If you use the extension with Turbowarp, Please use it's successor [PenguinGPT](https://rubyteam.tech/cdn/extensions/penguingpt.js) by [RubyTeam](https://rubyteam.tech/gallery).
-## Trying to use the import link provided will automatically download a copy of PenguinGPT. This is to 'fix' existing projects with WorkingTurboGPT that are imported by URL.ase i
-## Please use https://anonymous-cat1.github.io/WorkingTurboGPT/oldextension.js if you want or need to use the orginal.
+## Trying to use the import link provided will automatically download a copy of PenguinGPT. This is to 'fix' existing projects with WorkingTurboGPT imported by URL.
+## Please use https://anonymous-cat1.github.io/WorkingTurboGPT/oldextension.js if you want or need to use the original.
 
 # WorkingTurboGPT
 
