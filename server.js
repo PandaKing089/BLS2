@@ -1,16 +1,16 @@
 import express from "express";
 import cors from "cors";
+import fetch from "node-fetch"; // make sure node-fetch is in package.json
 
 const app = express();
 
-// ✅ Allow all origins (needed for PenguinMod sandbox)
+// ✅ Enable CORS for all origins
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type"]
 }));
 
-// Parse JSON bodies
 app.use(express.json({ limit: "1mb" }));
 
 // 🔑 OpenAI API key from Render environment
@@ -20,9 +20,10 @@ if (!OPENAI_API_KEY) {
   process.exit(1);
 }
 
-// Helper to keep token count reasonable
+// Clamp helper
 const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
+// POST /chat route
 app.post("/chat", async (req, res) => {
   try {
     const { messages = [], model = "gpt-3.5-turbo", max_output_tokens = 200 } = req.body || {};
@@ -42,23 +43,28 @@ app.post("/chat", async (req, res) => {
       })
     });
 
+    // Handle OpenAI errors gracefully
     if (!r.ok) {
       let text = await r.text();
       try {
         const json = JSON.parse(text);
         text = json.error?.message || text;
       } catch {}
-      return res.status(r.status).json({ error: text || `Request failed with status ${r.status}` });
+      
+      return res.status(r.status).json({
+        text: `⚠️ OpenAI Error: ${text}`
+      });
     }
 
     const data = await r.json();
     const output = data.choices?.[0]?.message?.content ?? "";
 
-    // ✅ Simplified JSON response for PenguinMod
+    // ✅ Simplified JSON for PenguinMod
     res.json({ text: output });
 
   } catch (e) {
-    res.status(500).json({ error: String(e) });
+    // Catch all server errors
+    res.status(500).json({ text: `⚠️ Server Error: ${String(e)}` });
   }
 });
 
