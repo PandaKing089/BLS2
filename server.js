@@ -1,51 +1,59 @@
-import express from 'express';
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
 
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: "1mb" }));
 
+// 🔑 Grab your API key from Render's environment variables
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 if (!OPENAI_API_KEY) {
-  console.error('Missing OPENAI_API_KEY env var');
+  console.error("❌ Missing OPENAI_API_KEY env var");
   process.exit(1);
 }
 
+// Clamp helper to keep max tokens safe
 const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
-app.post('/chat', async (req, res) => {
+app.post("/chat", async (req, res) => {
   try {
-    const { messages = [], model = 'gpt-4o-mini', max_output_tokens = 400 } = req.body || {};
-    const safeMax = clamp(Number(max_output_tokens) || 400, 32, 2000);
+    const { messages = [], model = "gpt-3.5-turbo", max_output_tokens = 200 } = req.body || {};
+    const safeMax = clamp(Number(max_output_tokens) || 200, 32, 2000);
 
-    const r = await fetch('https://api.openai.com/v1/responses', {
-      method: 'POST',
+    const r = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         model,
-        input: [
-          { role: 'system', content: 'You are helpful, concise, and safe for kids.' },
-          ...messages
-        ],
-        max_output_tokens: safeMax
+        messages,
+        max_tokens: safeMax
       })
     });
 
     if (!r.ok) {
-      const text = await r.text();
-      return res.status(r.status).json({ error: text });
+      let text = await r.text();
+      try {
+        const json = JSON.parse(text);
+        text = json.error?.message || text;
+      } catch {}
+      return res.status(r.status).json({
+        error: text || `Request failed with status ${r.status}`
+      });
     }
 
     const data = await r.json();
-    const output = data.output_text ?? (Array.isArray(data.output) ? data.output.map(p => p.content?.[0]?.text || '').join('') : '');
+    const output = data.choices?.[0]?.message?.content ?? "";
     res.json({ text: output, raw: data });
   } catch (e) {
     res.status(500).json({ error: String(e) });
   }
 });
 
+// 🚪 Start the server
 const PORT = process.env.PORT || 8787;
-app.listen(PORT, () => console.log(`Proxy listening on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`✅ Proxy running at http://localhost:${PORT}`));
+
+
